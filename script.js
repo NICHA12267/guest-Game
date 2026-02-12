@@ -1,4 +1,6 @@
-const nombreSecret = 9;
+// 1. La machine choisit un nombre secret aléatoire avec Math.floor
+// On multiplie par 100 pour la plage, et +1 pour commencer à 1 au lieu de 0
+let nombreSecret = Math.floor(Math.random() * 100) + 1;
 let etapes = 0;
 
 function jouer() {
@@ -9,54 +11,57 @@ function jouer() {
     
     let essai = parseInt(input.value);
     
-    if (isNaN(essai)) return;
+    if (isNaN(essai)) {
+        feedback.innerText = "⚠️ Entre un nombre valide !";
+        return;
+    }
 
-    etapes++;
+    etapes++; // Règle 4 : L'utilisateur réessaye
 
+    // Règle 5 : Jusqu'à ce que l'utilisateur trouve le nombre
     if (essai === nombreSecret) {
         // VICTOIRE
-        feedback.innerText = "FÉLICITATIONS !";
+        feedback.innerText = "🎉 FÉLICITATIONS !";
+        feedback.style.color = "#00ff88";
+        
+        // Règle 6 : Message exact de la photo
         stepsDisplay.innerText = "Vous avez prix " + etapes + " etapes pour deviner le nombre secret";
         
-        // Effets visuels
+        // Effets pro
         box.classList.add('victory-glow');
         input.disabled = true;
-        document.getElementById('btnJouer').classList.add('hidden');
+        document.getElementById('btnJouer').style.display = 'none';
         document.getElementById('btnRestart').classList.remove('hidden');
         
         lancerFeuArtifice();
     } else {
-        // INDICES
+        // Règle 3 : Plus grand ou plus petit
         if (essai < nombreSecret) {
-            feedback.innerText = "Le nombre secret est plus grand. Réessayez !";
+            feedback.innerText = "📈 Le nombre secret est plus grand !";
+            feedback.style.color = "#ff4d4d";
         } else {
-            feedback.innerText = "Le nombre secret est plus petit. Réessayez !";
+            feedback.innerText = "📉 Le nombre secret est plus petit !";
+            feedback.style.color = "#ff4d4d";
         }
-        input.value = "";
+        input.value = ""; // Vide le champ pour rejouer plus vite
         input.focus();
     }
 }
 
-// Fonction pour l'effet "Fleurs de fête / Confettis"
+// Fonction pour l'effet "Fleurs de fête"
 function lancerFeuArtifice() {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 80; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
-        
-        // Position aléatoire
         confetti.style.left = Math.random() * 100 + 'vw';
         
-        // Couleur aléatoire (fleurs colorées)
         const colors = ['#ff00ff', '#00d4ff', '#00ff88', '#ffcc00', '#ff4d4d'];
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         
-        // Vitesse aléatoire
         confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        confetti.style.opacity = Math.random();
-        
         document.body.appendChild(confetti);
         
-        // Nettoyage de la mémoire après l'animation
+        // Supprime après l'animation pour ne pas ralentir le navigateur
         setTimeout(() => confetti.remove(), 4000);
     }
 }
