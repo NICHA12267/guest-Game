@@ -1,67 +1,52 @@
-// 1. La machine choisit un nombre secret aléatoire avec Math.floor
-// On multiplie par 100 pour la plage, et +1 pour commencer à 1 au lieu de 0
-let nombreSecret = Math.floor(Math.random() * 100) + 1;
+// On multiplie par 22 pour que le 21 soit inclus dans l'arrondi inférieur
+let nombreSecret = Math.floor(Math.random() * 22); 
 let etapes = 0;
 
 function jouer() {
     const input = document.getElementById("userGuess");
     const feedback = document.getElementById("feedback");
     const stepsDisplay = document.getElementById("steps");
-    const box = document.getElementById("gameBox");
     
     let essai = parseInt(input.value);
     
-    if (isNaN(essai)) {
-        feedback.innerText = "⚠️ Entre un nombre valide !";
-        return;
-    }
+    if (isNaN(essai)) return;
 
-    etapes++; // Règle 4 : L'utilisateur réessaye
+    etapes++;
 
-    // Règle 5 : Jusqu'à ce que l'utilisateur trouve le nombre
     if (essai === nombreSecret) {
-        // VICTOIRE
         feedback.innerText = "🎉 FÉLICITATIONS !";
         feedback.style.color = "#00ff88";
-        
-        // Règle 6 : Message exact de la photo
+        // Message exact de ton image (avec la faute demandée)
         stepsDisplay.innerText = "Vous avez prix " + etapes + " etapes pour deviner le nombre secret";
         
-        // Effets pro
-        box.classList.add('victory-glow');
+        document.getElementById("btnJouer").classList.add("hidden");
+        document.getElementById("btnRestart").classList.remove("hidden");
         input.disabled = true;
-        document.getElementById('btnJouer').style.display = 'none';
-        document.getElementById('btnRestart').classList.remove('hidden');
         
-        lancerFeuArtifice();
-    } else {
-        // Règle 3 : Plus grand ou plus petit
-        if (essai < nombreSecret) {
-            feedback.innerText = "📈 Le nombre secret est plus grand !";
-            feedback.style.color = "#ff4d4d";
-        } else {
-            feedback.innerText = "📉 Le nombre secret est plus petit !";
-            feedback.style.color = "#ff4d4d";
-        }
-        input.value = ""; // Vide le champ pour rejouer plus vite
+        lancerFleurs();
+    } 
+    else if (essai < nombreSecret) {
+        feedback.innerText = "Le nombre est trop petit !";
+        feedback.style.color = "#ff4d4d";
+        input.value = "";
+        input.focus();
+    } 
+    else {
+        feedback.innerText = "Le nombre est trop grand !";
+        feedback.style.color = "#ff4d4d";
+        input.value = "";
         input.focus();
     }
 }
 
-// Fonction pour l'effet "Fleurs de fête"
-function lancerFeuArtifice() {
-    for (let i = 0; i < 80; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + 'vw';
-        
-        const colors = ['#ff00ff', '#00d4ff', '#00ff88', '#ffcc00', '#ff4d4d'];
-        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        
-        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        document.body.appendChild(confetti);
-        
-        // Supprime après l'animation pour ne pas ralentir le navigateur
-        setTimeout(() => confetti.remove(), 4000);
+function lancerFleurs() {
+    for (let i = 0; i < 100; i++) {
+        const div = document.createElement("div");
+        div.className = "confetti";
+        div.style.left = Math.random() * 100 + "vw";
+        div.style.backgroundColor = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        div.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        document.body.appendChild(div);
+        setTimeout(() => div.remove(), 4000);
     }
 }

@@ -2,27 +2,21 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu du Nombre Secret - Pro</title>
+    <title>Jeu de Devinette - Mode 21</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container" id="gameBox">
         <h2>Nombre Secret</h2>
-        <p class="subtitle">Trouvez le nombre choisi par la machine</p>
-        
+        <p class="subtitle">Devinez le nombre entre 0 et 21 inclus</p>
         <div class="input-group">
-            <input type="number" id="userGuess" placeholder="0" min="1">
+            <input type="number" id="userGuess" placeholder="?" min="0" max="21">
             <button onclick="jouer()" id="btnJouer">Essayer</button>
         </div>
-
-        <p id="feedback">Entrez un chiffre pour commencer...</p>
+        <p id="feedback">La machine a choisi son nombre...</p>
         <p id="steps"></p>
-        
         <button id="btnRestart" class="hidden" onclick="location.reload()">Rejouer</button>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
